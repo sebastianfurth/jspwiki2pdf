@@ -9,6 +9,12 @@ In order to get dependant JARs you must run the {{{mvn}}} command at least once 
 
 Since the JSPWiki source wasn't available in the [http://www.mvnrepository.com/search.html?query=jspwiki Maven repository] last I checked, you need to do that yourself. Easiest it probably to [http://jspwiki.org/wiki/AnonymousCVSAccess import JSPWiki as a project into Eclipse], create a JAR-file, [http://maven.apache.org/guides/mini/guide-installing-3rd-party-jars.html add the JAR-file to your local repository] and run {{{mvn}}} again.
 
+My command for importing JSPWiki:
+{{{
+mvn install:install-file -Dfile=<path-to-file> -DgroupId=com.ecyrd \
+    -DartifactId=jspwiki -Dversion=cvs -Dpackaging=jar
+}}}
+
 All set! Just do your work and run {{{mvn package}}} to create a new JAR-file for testing your modifications.
 
 If you need commit acces, [mailto:brattberg@gmail.com send me an email].
