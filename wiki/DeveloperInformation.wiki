@@ -11,10 +11,11 @@ Since the JSPWiki source wasn't available in the [http://www.mvnrepository.com/s
 
 My command for importing JSPWiki:
 {{{
-mvn install:install-file -Dfile=<path-to-file> -DgroupId=com.ecyrd \
-    -DartifactId=jspwiki -Dversion=cvs -Dpackaging=jar
+mvn install:install-file -Dfile=<path-to-file> -DgroupId=com.ecyrd -DartifactId=jspwiki -Dversion=cvs -Dpackaging=jar
 }}}
 
 All set! Just do your work and run {{{mvn package}}} to create a new JAR-file for testing your modifications.
+
+To create a single jar-file with all dependancies just run {{{mvn assembly:assembly}}}.
 
 If you need commit acces, [mailto:brattberg@gmail.com send me an email].
