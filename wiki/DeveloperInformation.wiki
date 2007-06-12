@@ -1,6 +1,4 @@
 #labels Phase-Implementation,Phase-Deploy
-# Information on contributing code to the jspwiki2pdf project
-
 = Contributing code to the jspwiki2pdf project =
 
 The easiest way to contribute to this project is to mimic the way I do development on the project.
@@ -14,4 +12,3 @@ Since the JSPWiki source wasn't available in the [http://www.mvnrepository.com/s
 All set! Just do your work and run {{{mvn package}}} to create a new JAR-file for testing your modifications.
 
 If you need commit acces, [mailto:brattberg@gmail.com send me an email].
-
