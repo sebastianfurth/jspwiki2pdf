@@ -1,10 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-  <classpathentry kind="src" path="src/main/java"/>
-  <classpathentry kind="output" path="target/classes"/>
-  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/fop/0.20.5/fop-0.20.5.jar"/>
-  <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14.jar"/>
-  <classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar"/>
-  <classpathentry kind="var" path="M2_REPO/jtidy/jtidy/4aug2000r7-dev/jtidy-4aug2000r7-dev.jar"/>
-  <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.2/junit-3.8.2.jar"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="M2_REPO/xerces/xercesImpl/2.5.0/xercesImpl-2.5.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/avalon/framework/avalon-framework-api/4.3.1/avalon-framework-api-4.3.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-gui-util/1.6-1/batik-gui-util-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-awt-util/1.6-1/batik-awt-util-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/fop/0.93/fop-0.93.jar"/>
+	<classpathentry kind="var" path="M2_REPO/junit/junit/3.8.2/junit-3.8.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-gvt/1.6-1/batik-gvt-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/jtidy/jtidy/4aug2000r7-dev/jtidy-4aug2000r7-dev.jar"/>
+	<classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-bridge/1.6-1/batik-bridge-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-transcoder/1.6-1/batik-transcoder-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/avalon/framework/avalon-framework-impl/4.3.1/avalon-framework-impl-4.3.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-extension/1.6-1/batik-extension-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-ext/1.6-1/batik-ext-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/xmlgraphics-commons/1.1/xmlgraphics-commons-1.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-parser/1.6-1/batik-parser-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-xml/1.6-1/batik-xml-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/xml-apis/xmlParserAPIs/2.0.2/xmlParserAPIs-2.0.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-script/1.6-1/batik-script-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/commons-io/commons-io/1.1/commons-io-1.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-dom/1.6-1/batik-dom-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-svg-dom/1.6-1/batik-svg-dom-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-css/1.6-1/batik-css-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/batik/batik-util/1.6-1/batik-util-1.6-1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JSPWiki"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
