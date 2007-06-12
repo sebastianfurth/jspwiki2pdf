@@ -8,6 +8,17 @@
 	<name>JSPWiki2PDF Servlet</name>
 	<build>
 		<defaultGoal>package</defaultGoal>
+		<plugins>
+		<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+						<descriptorRef>project</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
@@ -26,11 +37,17 @@
     <groupId>jtidy</groupId>
     <artifactId>jtidy</artifactId>
     <version>4aug2000r7-dev</version>
+</dependency><dependency>
+    <groupId>com.ecyrd</groupId>
+    <artifactId>jspwiki</artifactId>
+    <version>cvs</version>
+    <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId>log4j</groupId>
     <artifactId>log4j</artifactId>
     <version>1.2.14</version>
+    <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId>org.apache.xmlgraphics</groupId>
