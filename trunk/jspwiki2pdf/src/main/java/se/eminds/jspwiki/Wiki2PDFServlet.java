@@ -47,6 +47,7 @@ import org.w3c.tidy.Tidy;
 import com.ecyrd.jspwiki.WikiContext;
 import com.ecyrd.jspwiki.WikiEngine;
 import com.ecyrd.jspwiki.WikiPage;
+import com.sun.xml.internal.ws.wsdl.parser.MIMEConstants;
 
 /**
  * Servlet to convert an HTML page into a PDF file.
