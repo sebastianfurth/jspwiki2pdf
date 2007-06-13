@@ -52,7 +52,7 @@ import com.ecyrd.jspwiki.WikiPage;
  * Servlet to convert a JSPWiki HTML page into a PDF file.
  * 
  * <p/>This was created to add PDF export functionality to <a
- * href="http://www.jspwiki.org">JSPWiki</a> but could liekly be modified to
+ * href="http://www.jspwiki.org">JSPWiki</a> but could likely be modified to
  * work elsewhere without too much trouble.
  * 
  * <p/>Parameters:
