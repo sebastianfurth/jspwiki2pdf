@@ -1,4 +1,25 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<!-- 
+	Project Object Model for Maven 2+ for building jspwiki2pdf.
+	For more information, see: http://code.google.com/p/jspwiki2pdf/
+	
+    Copyright (C) 2005-2007 Pal Brattberg (brattberg@gmail.com)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation; either version 2.1 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.palbrattberg</groupId>
@@ -7,13 +28,16 @@
 	<packaging>jar</packaging>
 	<name>JSPWiki2PDF Servlet</name>
 	<build>
-		<defaultGoal>package</defaultGoal>
+		<defaultGoal>assembly:assembly</defaultGoal>
+		<finalName>jspwiki2pdf</finalName>
 		<plugins>
-		<plugin>
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
+						<descriptorRef>
+							jar-with-dependencies
+						</descriptorRef>
 						<descriptorRef>project</descriptorRef>
 					</descriptorRefs>
 				</configuration>
@@ -22,10 +46,20 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.2</version>
-			<scope>test</scope>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>fop</artifactId>
+			<version>0.93</version>
+		</dependency>
+		<dependency>
+			<groupId>jtidy</groupId>
+			<artifactId>jtidy</artifactId>
+			<version>4aug2000r7-dev</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ecyrd</groupId>
+			<artifactId>jspwiki</artifactId>
+			<version>cvs</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -34,25 +68,16 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-    <groupId>jtidy</groupId>
-    <artifactId>jtidy</artifactId>
-    <version>4aug2000r7-dev</version>
-</dependency><dependency>
-    <groupId>com.ecyrd</groupId>
-    <artifactId>jspwiki</artifactId>
-    <version>cvs</version>
-    <scope>provided</scope>
-</dependency>
-<dependency>
-    <groupId>log4j</groupId>
-    <artifactId>log4j</artifactId>
-    <version>1.2.14</version>
-    <scope>provided</scope>
-</dependency>
-<dependency>
-    <groupId>org.apache.xmlgraphics</groupId>
-    <artifactId>fop</artifactId>
-    <version>0.93</version>
-</dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.2</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
