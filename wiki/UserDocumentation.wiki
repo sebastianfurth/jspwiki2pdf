@@ -1,0 +1,272 @@
+#Notes for users of this plugin
+
+= Adding PDF support for JSPWiki =
+
+This is a servlet thats used to export a Wiki page as a PDF file. It's not technically a plugin, but I figured it fit here. 
+
+I looked at [Rino]s work ([IdeasPDFWriter]), but it seems he's no longer maintaining that work, so I created a new (and IMHO, simpler) servlet based on his work. This servlet should also handle embedded images. It should be pretty easy to set up, as it consists of a single Java class and an XSL file.
+
+Give it a spin!  
+-----
+Parameters:\\
+||page|The name of the page you wish to create a PDF file of. (Required)
+||xsl|The name of an XSL-file that should be used to convert the XML FO file into a PDF. Default value: {{xhtml2fo.xsl}}. (Optional)
+||ext|If you experience problems with Internet Explorer, it might help to add an URL parameter last in the request that ends with {{.pdf}}. (Optional)
+
+To install, enter the following in the {{web.xml}} of your JSPWiki installation:
+
+{{{ <servlet>
+     <servlet-name>Wiki2PDFServlet</servlet-name>
+     <servlet-class>se.eminds.jspwiki.Wiki2PDFServlet</servlet-class>
+ </servlet>
+ 
+ <servlet-mapping>
+     <servlet-name>Wiki2PDFServlet</servlet-name>
+     <url-pattern>/wiki.pdf</url-pattern>
+ </servlet-mapping>
+}}}
+ 
+Add the call to the servlet in any page, {{templates/default/ViewTemplate.jsp}} is a good candidate:
+
+{{{<a href="wiki.pdf?page=<wiki:Variable var="pagename" />&amp;amp;ext=.pdf">View PDF</a>}}}
+ 
+You need to download some external JAR's that are need for this servlet to work.
+
+__Apache FOP__ is used to transform XML to PDF.\\
+Download the binary distribution from here: http://www.apache.org/dyn/closer.cgi/xmlgraphics/fop \\
+Unpack it, and copy the following libraries to {{WEB-INF/lib}}:
+* avalon-framework.jar (or whatever version, avalon-framework-cvs-20020806.jar for example)
+* batik.jar
+* fop.jar
+
+__jTidy__ is used to transform HTML to XML.\\
+Download the binary distribution from here: [http://sourceforge.net/project/showfiles.php?group_id=13153] \\
+Unpack it, and copy Tidy.jar to {{WEB-INF/lib}}.
+
+__JIMI__ is used to allow image inclusion in PDFs. \\
+Download from here: http://java.sun.com/products/jimi/ \\
+Unpack it, and copy {{~JimiProClasses.zip}} to {{WEB-INF/lib/JimiProClasses.jar}}. ''Note the change of the file suffix.''
+
+Next, place the {{wiki2pdf.jar}} in {{WEB-INF/lib}} and restart tomcat for the changes to take effect. 
+
+__Installation notes:__\\
+The instructions above work nicely with Tomcat, but if you are using Resin you may see the following in your logs:
+{{{
+2005-04-13 17:06:56,048 [thread-pool-9] ERROR se.eminds.jspwiki.Wiki2PDFServlet InfosysWiki-v1:PDF - Throwable caught while trying to generate PDF.
+com.caucho.xpath.XPathParseException: expected binary operation at `table' in ancestor:: table[1]/@rules = 'groups'
+ at com.caucho.xpath.XPathParser.error(XPathParser.java:1253)
+ at com.caucho.xpath.XPathParser.scanToken(XPathParser.java:1208)
+ at com.caucho.xpath.XPathParser.parseExpr(XPathParser.java:515)
+ at com.caucho.xpath.XPath.parseExpr(XPath.java:334)
+ at com.caucho.xsl.java.XslNode.parseExpr(XslNode.java:1031)
+ at com.caucho.xsl.java.XslIf.addAttribute(XslIf.java:59)
+ at com.caucho.xsl.JavaGenerator.createChild(JavaGenerator.java:381)
+ at com.caucho.xsl.JavaGenerator.createChild(JavaGenerator.java:391)
+ at com.caucho.xsl.JavaGenerator.createChild(JavaGenerator.java:391)
+ at com.caucho.xsl.Generator.generateStylesheet(Generator.java:519)
+ at com.caucho.xsl.Generator.generate(Generator.java:333)
+ at com.caucho.xsl.AbstractStylesheetFactory.generate(AbstractStylesheetFactory.java:1045)
+ at com.caucho.xsl.AbstractStylesheetFactory.generateFromNode(AbstractStylesheetFactory.java:624)
+ at com.caucho.xsl.AbstractStylesheetFactory.newTemplates(AbstractStylesheetFactory.java:595)
+ at com.caucho.xsl.AbstractStylesheetFactory.newTransformer(AbstractStylesheetFactory.java:423)
+ at se.eminds.jspwiki.Wiki2PDFServlet.createPDF(Wiki2PDFServlet.java:210)
+ at se.eminds.jspwiki.Wiki2PDFServlet.doGet(Wiki2PDFServlet.java:162)
+ at javax.servlet.http.HttpServlet.service(HttpServlet.java:113)
+ at javax.servlet.http.HttpServlet.service(HttpServlet.java:90)
+ at com.caucho.server.dispatch.ServletFilterChain.doFilter(ServletFilterChain.java:99)
+ at com.caucho.server.webapp.WebAppFilterChain.doFilter(WebAppFilterChain.java:163)
+ at com.caucho.server.dispatch.ServletInvocation.service(ServletInvocation.java:207)
+ at com.caucho.server.http.HttpRequest.handleRequest(HttpRequest.java:249)
+ at com.caucho.server.port.TcpConnection. run(TcpConnection.java:327)
+ at com.caucho.util.ThreadPool. runTasks(ThreadPool.java:450)
+ at com.caucho.util.ThreadPool. run(ThreadPool.java:394)
+ at java.lang.Thread. run(Thread.java:534)
+}}}
+
+What you could try is to use the Xalan XSLT processor from Apache. To do this, download Xalan from
+http://www.apache.org/dyn/closer.cgi/xml/xerces-j/ and then tell Resin to use Xalan instead of it's own XSLT processor (this can be applied to only jspwiki, no need to change for other applications running on this server). The jar should be placed in {{WEB-INF/lib}}.
+
+Set the following in the web.xml file in jspwiki:
+
+{{{<web-app>
+   <system-property javax.xml.transform.TransformerFactory="org.apache.xalan.processor.TransformerFactoryImpl"/>
+</web-app>}}}
+
+See http://browserinsight2.lunaimaging.com:8090/ref/xml/parsing.xtp for more information.
+
+__Known limitations:__\\
+Cannot handle tables correctly (doesn't show up at all). (See [PDF Plugin Discussion] for a solution)
+
+__Changelog:__ \\
+2005-03-11: Fixed problem with extended char sets. Tested with both {{UTF-8}} and {{ISO-8859-1}}. Changed link from {{wiki:PageName}} to {{wiki:Variable var="pagename" }} to handle pages with spaces correctly.
+
+For more, and better looking, XSL files, see http://www.antennahouse.com/XSLsample/XSLsample.htm
+
+This plugin was originally created by PålBrattberg, and released 2005-03-10. Don't hesitate to send me feedback to {{pal at eminds.se}}.
+
+
+----
+
+!!PDF Generation using CSSToXSLFO
+
+Having no support for tables was a bit of a show stopper here since as well as wiki tables going missing, it also means things like Java2HTML code blocks go missing too. So I had a look into alternatives. I started by trying to change the XSL sheet, I know only a little of XSL, and the task was either too much for me, or it was not so easy. So anyway, I gave up on that one. I thought about changing JSPWiki, but didn't like that idea because of the hassle of upgrading. Then I found this page:
+
+http://www.re.be/css2xslfo/
+
+It converts an XHTML page to PDF using a CSS file! (using the css2fop part)
+
+So I started to modify your servlet to use it Pål (great work, thanks!). It doesn't do any explicit XML processing now, I used the "path of least resistance" and used a utility class provided by css2fop.
+
+!Prerequisits
+
+*ApacheFOP (avalon-framework.jar, batik.jar, fop.jar)
+*jTidy (Tidy.jar)
+*JIMI - image inclusion in PDFs (JimiProClasses.jar)
+*CSS2FOP (css2fop1_2.jar or newer)
+*CSS2FOP version of Wiki2PDF plugin (wiki2pdf_css2fop.jar) - in attached wiki2pdf_css2fop.zip 
+*CSS base files - (pdf_xhtml.css, pdf_xhtml_print.css) - in attached wiki2pdf_css2fop.zip 
+*CSS sample file - (pdf.css) - sample in attached wiki2pdf_css2fop.zip 
+
+
+!Installation
+
+*Follow the installation notes for Pål's servlet above.
+*Copy all jar files listed above into your WEB-INF/lib directory.
+*Copy the base css files to your template dir (without these, your PDF will be empty)
+*Copy sample css file to your template dir
+*Restart your servlet container
+
+!Customisation
+
+Page titles: In my company, we use the wiki page name in our template as our page titles, but these are not included in the actual wiki text, so I needed to add them explicitly to the HTML sent for PDF generation. To turn off these page titles, add {{&title=false}} to the URL (e.g. http://host/wiki/wiki.pdf?title=false&page=PageName). When generated, the title is in a div block with class "title".
+
+CSS stylesheet: To change the name of the CSS stylesheet to use for PDF generation, include {{&css=stylesheet.css}} to the URL (e.g. http://host/wiki/wiki.pdf?css=stylesheet.css&page=PageName). Remember that you need to import (or otherwise include the text of) the base CSS files - otherwise you will get an empty PDF. The default is {{pdf.css}}. These are kept in your template dir.
+
+When creating custom CSS files, you should be aware that there is not a 1:1 translation between CSS and PDF (via XSLFO). Most things work, but some things do not. Your milage may vary.
+
+The included base CSS files are very basic. Complex tables may not look too hot when converted to PDF because FOP does not support auto-generated width tables. If you manage to make some decent, professional CSS files, I'd be very interested in seeing them! Please share them here.
+
+__Update 2005-11-16 17:05 GMT:__
+*Cleaned up a few things
+*Now allows preformatted text and Java2HTML plugin to work (not trivial!)
+*Supplied sample nice-ish looking CSS focused for JSPWiki
+
+-- KieronWilkinson
+
+
+
+----
+
+
+
+----
+
+It appears that the wiki2pdf.jar is corrupt - when I open the file in a text editor, it doesn't even have the PK header, rather it appears to be a PNG image file.  Can you please upload a valid JAR?
+
+--Brad Horstkotte, 31-Mar-2006
+
+Done. --ClaasRuschmeyer, 22-Apr-2006
+----
+----
+euh... Seems like something ain't really working...
+{{{java.net.MalformedURLException: no protocol: /templates/smallpiece/
+	at java.net.URL.<init>(URL.java:537)
+	at java.net.URL.<init>(URL.java:434)
+	at java.net.URL.<init>(URL.java:383)
+	at se.eminds.jspwiki.Wiki2PDFServlet.doGet(Wiki2PDFServlet.java:165)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:696)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:809)
+        (...)}}}
+Brice, 04-27-2006
+
+
+----
+
+Thanks for the repaired jar file Claas, that fixed it.
+
+I still get nothing for tables though, wonder if I missed something...
+
+--Brad Horstkotte, 27-Apr-2006
+
+
+----
+
+We needed image support inside the PDF for our Wiki. So I installed the PDF plugin. Since we are using the Image plugin(wich inserts the Image inside a table), I had to used the xhtml2fo4fop.xsl because it supports tables. Another problem was that inside our wiki people did not use the full path, I fix this problem by adding the following code in xhtml2fo4fop.xsl:
+
+{{{ <!-- =========================================================================
+     Image Parameters
+ ==============================================================================-->
+
+ <!-- Base URL same has in the JSPWiki.properties -->
+   <xsl:param name="baseURL">http://localhost/wiki/</xsl:param>
+
+[...]
+
+    <xsl:attribute name="src">
+      <xsl:text>url('</xsl:text>
+      
+        <xsl:if test="@src">
+	  <xsl:choose>
+            <xsl:when test="contains(@src, 'http://')">
+              <xsl:value-of select="@src"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$baseURL"/>
+              <xsl:value-of select="@src"/>
+           </xsl:otherwise>
+          </xsl:choose>
+        </xsl:if>
+
+      <xsl:text>')</xsl:text>
+    </xsl:attribute>
+}}}
+
+The only problems I have left is that the width and height don't work in the PDF, and that if I deploy the Wiki I need to edit xhtml2fo4fop.xsl(I would like to be able to get it from the JSPWiki.properties). 
+
+Thanks
+
+Luke Masters
+
+--[Luke Masters|mailto:masters_luke@hotmail.com], 08-Jul-2006
+
+
+----
+
+Luke,
+
+Can you post your installation instructions? Or elaborate on how to get the table support working?  I have the PDF converter working .. but it does not do tables. 
+
+--RobSchramm, 20-Jul-2006
+
+
+See [PDFPluginDiscussion] (second block) and the attachments there. --ClaasRuschmeyer, 20-Jul-2006
+
+----
+
+Hello, I have problem with Czech characters, basiclly with UTF-8. I use CSS2TOPDF and verything is OK (tables, images - full URL), but characters '?' are present. jspWiki.encodig=UTF-8. Could you help me to solve it or tell me where can I make some configuration to change this behavior? It's seems that output PDF is in ISO-8859-1.
+
+--Jaroslav, 11-Aug-2006
+
+
+----
+
+I just modified {{[wiki2pdf.jar]}} a little bit, now it is possible to view the PDFs via HTTPS in Internet Explorer. I also included {{xhtml2fo4fop.xsl}}, which adds table and image support. See [PDFPluginDiscussion] for further information.
+
+--[Candid Dauth], 18-Aug-2006
+
+----
+
+Hi,
+
+in the previous version, {{xhtml2fo4fop.xsl}} did not work on Internet Explorer (just an empty screen), Firefox was ok.
+I downloaded the latest version but this one seems to be Java-1.5 specific, I get the error:\\ {{{java.lang.NoClassDefFoundError: java/lang/StringBuilder}}}.\\
+Can you please provide a 1.4 compatible version ? Many people and especially companies are still using it.
+
+--[MP], 24-Aug-2006
+
+
+----
+
+It was possible to view pages that you didn't have access to via PDF. I just committed a patch that fixes this.
+
+--[Candid Dauth], 24-Aug-2006
