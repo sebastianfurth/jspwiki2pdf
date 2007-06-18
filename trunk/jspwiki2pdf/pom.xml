@@ -24,7 +24,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.palbrattberg</groupId>
 	<artifactId>jspwiki2pdf</artifactId>
-	<version>2.1</version>
+	<version>2.1.1</version>
 	<packaging>jar</packaging>
 	<name>JSPWiki2PDF Servlet</name>
 	<build>
