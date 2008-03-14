@@ -64,6 +64,8 @@ import com.ecyrd.jspwiki.WikiPage;
  * <li><i>ext</i> - If you experience problems with Internet Explorer, it
  * might help to add an URL parameter last in the request that ends with
  * <tt>.pdf</tt>. (Optional)</li>
+ * <li><i>encoding</i> - ID of the encoding to be used like UTF-8 or ISO-8859-1
+ * (Optional)</li>
  * </ul>
  * 
  * <p/>To install, simply copy <tt>jspwiki2pdf-jar-with-dependencies.jar</tt>
@@ -86,7 +88,7 @@ import com.ecyrd.jspwiki.WikiPage;
  * <tt>templates/default/ViewTemplate.jsp</tt> is a good candidate:
  * 
  * <pre>
- * &lt;a href=&quot;wiki.pdf?page=&lt;wiki:Variable var=&quot;pagename&quot; /&gt;&amp;ext=.pdf&quot;&gt;View PDF&lt;/a&gt;
+ * &lt;a href=&quot;wiki.pdf?page=&lt;wiki:Variable var=&quot;pagename&quot; /&gt;&amp;ext=.pdf&amp;encoding=&quot;&gt;View PDF&lt;/a&gt;
  * </pre>
  * 
  * In case you do not want the massive
@@ -122,6 +124,7 @@ import com.ecyrd.jspwiki.WikiPage;
  * Thanks to <em>Ruben Inoto</em> for his prior work!
  * 
  * @author <a href="http://palbrattberg.com">P&aring;l Brattberg</a>
+ * @author Henrik Zatterman
  * @version 2.1 (2007-06-13)
  * @see <a href="http://www.jspwiki.org/Wiki.jsp?page=PDFPlugin">PDF plugin page</a>
  * @see <a href="http://code.google.com/p/jspwiki2pdf/">Project home page</a>
@@ -168,13 +171,20 @@ public class Wiki2PDFServlet extends HttpServlet {
             xsl = DEFAULT_XSL_FILE;
         }
 
+        //Get encoding or use the default if the parameter is empty
+        String encoding = req.getParameter("encoding");
+        if(encoding == null || ("".equals(encoding.trim()))){
+        	encoding = res.getCharacterEncoding();
+        }
+        encoding = encoding.trim();
+
         log.debug("Generating PDF for page = \"" + page + "\" using xsl = \"" + xsl + "\".");
 
         String htmlPage = m_wikiEngine.getHTML(page);
         log.debug("Successfully got the HTML for requested page.");
 
         try {
-            createPDF(page, htmlPage, xsl, getBaseURL(req), res);
+            createPDF(page, htmlPage, xsl, getBaseURL(req), res, encoding);
         } catch (Throwable t) {
             log.error("Throwable caught while trying to generate PDF.", t);
             throw new ServletException(t);
@@ -201,10 +211,10 @@ public class Wiki2PDFServlet extends HttpServlet {
      *             If something goes wrong during the creation of the PDF.
      */
     private void createPDF(final String nameOfPage, final String htmlOfPage, final String xslFileName,
-            final String baseURL, final HttpServletResponse response) throws Exception {
+            final String baseURL, final HttpServletResponse response, final String encoding) throws Exception {
         // Convert HTML into XML
         InputStream in = new ByteArrayInputStream(("<title>" + nameOfPage + "</title>" + htmlOfPage)
-            .getBytes(response.getCharacterEncoding()));
+            .getBytes(encoding));
 
         Tidy tidy = new Tidy();
         tidy.setXmlOut(true);
