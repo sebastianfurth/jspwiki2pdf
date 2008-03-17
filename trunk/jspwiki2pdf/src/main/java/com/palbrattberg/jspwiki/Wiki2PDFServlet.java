@@ -42,6 +42,9 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
 
 import com.ecyrd.jspwiki.WikiContext;
@@ -221,6 +224,8 @@ public class Wiki2PDFServlet extends HttpServlet {
         Document xmlDocument = tidy.parseDOM(in, null);
         log.debug("Page \"" + nameOfPage + "\" converted into XML ok.");
 
+        globalizeHrefs(xmlDocument, baseURL);
+        
         // Setup a buffer to obtain the content length
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -256,5 +261,22 @@ public class Wiki2PDFServlet extends HttpServlet {
     private static String getBaseURL(HttpServletRequest request) {
         return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
                 + request.getContextPath() + "/";
+    }
+    
+    private void globalizeHrefs(Node node, String baseURL){
+    	if("a".equals(node.getNodeName())){
+        	NamedNodeMap map = node.getAttributes();
+    		Node tempNode = map.getNamedItem("href");
+    		if(!(tempNode.getNodeValue().indexOf("://") < 8  && tempNode.getNodeValue().indexOf("://") >= 0)){
+    			tempNode.setNodeValue(baseURL + tempNode.getNodeValue());
+    			map.setNamedItem(tempNode);
+    		}
+    	}
+    	if(node.hasChildNodes()){
+			NodeList nl = node.getChildNodes();
+			for(int i = 0; i < nl.getLength(); i++){
+				globalizeHrefs(nl.item(i), baseURL);
+			}
+		}
     }
 }
