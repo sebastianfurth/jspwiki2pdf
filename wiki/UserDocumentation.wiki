@@ -7,6 +7,7 @@ This was created to add PDF export functionality to JSPWiki but could likely be 
 || page || The name of the page you wish to create a PDF file of. (Required)  ||
 || xsl || The name of an XSL-file that should be used to convert the XML FO file into a PDF. Default value: default.xsl. (Optional)  ||
 || ext || If you experience problems with Internet Explorer, it might help to add an URL parameter last in the request that ends with .pdf. (Optional)  ||
+||encoding||ID of the encoding to be used like {{UTF-8}} or {{ISO-8859-1}}. (Optional)||
 
 To install, simply copy jspwiki2pdf-jar-with-dependencies.jar to /WEB-INF/lib of your JSPWiki installation and enter the following in the web.xml file: 
 
@@ -25,7 +26,7 @@ To install, simply copy jspwiki2pdf-jar-with-dependencies.jar to /WEB-INF/lib of
 You should also add the call to the servlet somewhere on your page, templates/default/ViewTemplate.jsp is a good candidate: 
 
 {{{
- <a href="wiki.pdf?page=<wiki:Variable var="pagename" />&ext=.pdf">View PDF</a>
+ <a href="wiki.pdf?page=<wiki:Variable var="pagename" />&encoding=UTF8&ext=.pdf">View PDF</a>
 }}}
  
 In case you do not want the massive jspwiki2pdf-jar-with-dependencies.jar file that includes all dependancies needed, you must download them yourself and add them to tt>WEB-INF/lib. If you do that, you may use the smuch smaller jspwiki2pdf.jar file that just includes the actual code for Wiki2PDFServlet. 
@@ -42,9 +43,7 @@ Next, place the wiki2pdf.jar in /WEB-INF/lib and restart tomcat for the changes 
 
 If things do not work out, visit the jspwiki2pdf page for assistance. 
 
-Thanks to Ruben Inoto for his prior work! 
-
-
+Thanks to Ruben Inoto for his prior work and to Henrik Zätterman for adding new features! 
 
 
 
