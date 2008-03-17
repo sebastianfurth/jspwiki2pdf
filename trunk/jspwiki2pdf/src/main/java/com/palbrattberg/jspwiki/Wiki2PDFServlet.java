@@ -128,7 +128,7 @@ import com.ecyrd.jspwiki.WikiPage;
  * 
  * @author <a href="http://palbrattberg.com">P&aring;l Brattberg</a>
  * @author Henrik Zatterman
- * @version 2.1 (2007-06-13)
+ * @version 2.2 (2008-03-17)
  * @see <a href="http://www.jspwiki.org/Wiki.jsp?page=PDFPlugin">PDF plugin page</a>
  * @see <a href="http://code.google.com/p/jspwiki2pdf/">Project home page</a>
  */
