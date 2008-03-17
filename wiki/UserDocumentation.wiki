@@ -7,7 +7,7 @@ This was created to add PDF export functionality to JSPWiki but could likely be 
 || page || The name of the page you wish to create a PDF file of. (Required)  ||
 || xsl || The name of an XSL-file that should be used to convert the XML FO file into a PDF. Default value: default.xsl. (Optional)  ||
 || ext || If you experience problems with Internet Explorer, it might help to add an URL parameter last in the request that ends with .pdf. (Optional)  ||
-||encoding||ID of the encoding to be used like {{UTF-8}} or {{ISO-8859-1}}. (Optional)||
+||encoding||ID of the encoding to be used like `UTF-8` or `ISO-8859-1`. (Optional)||
 
 To install, simply copy jspwiki2pdf-jar-with-dependencies.jar to /WEB-INF/lib of your JSPWiki installation and enter the following in the web.xml file: 
 
@@ -44,8 +44,6 @@ Next, place the wiki2pdf.jar in /WEB-INF/lib and restart tomcat for the changes 
 If things do not work out, visit the jspwiki2pdf page for assistance. 
 
 Thanks to Ruben Inoto for his prior work and to Henrik Zätterman for adding new features! 
-
-
 
 
 
