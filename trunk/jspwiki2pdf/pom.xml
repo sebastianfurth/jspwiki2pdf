@@ -2,14 +2,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.palbrattberg</groupId>
 	<artifactId>jspwiki2pdf</artifactId>
-	<version>2.2</version>
+	<version>2.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>JSPWiki2PDF Servlet</name>
   <url>http://code.google.com/p/jspwiki2pdf/</url>
   <scm>
-    <connection>scm:svn:http://jspwiki2pdf.googlecode.com/svn/tags/jspwiki2pdf-2.2</connection>
-    <developerConnection>scm:svn:https://jspwiki2pdf.googlecode.com/svn/tags/jspwiki2pdf-2.2</developerConnection>
-    <url>http://jspwiki2pdf.googlecode.com/svn/tags/jspwiki2pdf-2.2</url>
+    <connection>scm:svn:http://jspwiki2pdf.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://jspwiki2pdf.googlecode.com/svn/trunk/</developerConnection>
+    <url>http://jspwiki2pdf.googlecode.com/svn/trunk/</url>
   </scm>
 	<build>
 		<defaultGoal>assembly:assembly</defaultGoal>
