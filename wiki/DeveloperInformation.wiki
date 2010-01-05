@@ -3,7 +3,7 @@
 
 The easiest way to contribute to this project is to mimic the way I do development on the project.
 
-I use [http://www.eclipse.org/downloads/ Eclipse 3.3+] and import the project into my workspace. I use [http://maven.apache.org/download.html Maven 2.0.4+] for building and maintaining the dependancies.
+I use [http://www.eclipse.org/downloads/ Eclipse 3.4+] and import the project into my workspace. I use [http://maven.apache.org/download.html Maven 2.2+] for building and maintaining the dependancies.
 
 In order to get dependant JARs you must run the {{{mvn}}} command at least once for Maven to be able to download all dependancies.
 
