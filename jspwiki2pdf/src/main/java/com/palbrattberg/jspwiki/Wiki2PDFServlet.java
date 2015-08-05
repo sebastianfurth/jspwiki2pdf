@@ -21,6 +21,7 @@ package com.palbrattberg.jspwiki;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -41,15 +42,17 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.apache.log4j.Logger;
+import org.apache.wiki.WikiContext;
+import org.apache.wiki.WikiEngine;
+import org.apache.wiki.WikiPage;
+import org.apache.wiki.auth.AuthorizationManager;
+import org.apache.wiki.auth.permissions.PagePermission;
+import org.apache.wiki.auth.permissions.PermissionFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.tidy.Tidy;
-
-import com.ecyrd.jspwiki.WikiContext;
-import com.ecyrd.jspwiki.WikiEngine;
-import com.ecyrd.jspwiki.WikiPage;
 
 /**
  * Servlet to convert a JSPWiki HTML page into a PDF file.
@@ -127,8 +130,8 @@ import com.ecyrd.jspwiki.WikiPage;
  * Thanks to <em>Ruben Inoto</em> for his prior work!
  * 
  * @author <a href="http://palbrattberg.com">P&aring;l Brattberg</a>
- * @author Henrik Zatterman
- * @version 2.2 (2008-03-17)
+ * @author Henrik Zatterman, Sebastian Furth (Migration to JSPWiki 2.10)
+ * @version 2.10
  * @see <a href="http://www.jspwiki.org/Wiki.jsp?page=PDFPlugin">PDF plugin page</a>
  * @see <a href="http://code.google.com/p/jspwiki2pdf/">Project home page</a>
  */
@@ -147,7 +150,7 @@ public class Wiki2PDFServlet extends HttpServlet {
         super.init(config);
         m_wikiEngine = WikiEngine.getInstance(config);
         m_transformerFactory = TransformerFactory.newInstance();
-        m_fopFactory = FopFactory.newInstance();
+        m_fopFactory = FopFactory.newInstance(new File(".").toURI());
     }
 
     /*
@@ -160,12 +163,13 @@ public class Wiki2PDFServlet extends HttpServlet {
         res.setHeader("Pragma", "private");
 
         String page = req.getParameter("page");
-        if ((page == null) || ("".equals(page.toString()))) {
+        if ((page == null) || ("".equals(page))) {
             throw new IllegalArgumentException("You must supply a valid value for parameter \"page\".");
         }
 
-        WikiContext context = new WikiContext(m_wikiEngine, req, new WikiPage(m_wikiEngine, page));
-        if (!context.hasAccess(res, true)) {
+        WikiPage wikiPage = new WikiPage(m_wikiEngine, page);
+        WikiContext context = new WikiContext(m_wikiEngine, req, wikiPage);
+        if (!userCanViewArticle(wikiPage, context)) {
             return;
         }
 
@@ -194,6 +198,15 @@ public class Wiki2PDFServlet extends HttpServlet {
         }
 
         log.debug("PDF generation finished successfully.");
+    }
+
+    public boolean userCanViewArticle(WikiPage page, WikiContext context) {
+        AuthorizationManager authmgr = m_wikiEngine.getAuthorizationManager();
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (authmgr) {
+            PagePermission pp = PermissionFactory.getPagePermission(page, "view");
+            return authmgr.checkPermission(context.getWikiSession(), pp);
+        }
     }
 
     /**
@@ -267,7 +280,8 @@ public class Wiki2PDFServlet extends HttpServlet {
     	if("a".equals(node.getNodeName())){
         	NamedNodeMap map = node.getAttributes();
     		Node tempNode = map.getNamedItem("href");
-    		if(!(tempNode.getNodeValue().indexOf("://") < 8  && tempNode.getNodeValue().indexOf("://") >= 0)){
+    		if(!(tempNode.getNodeValue().indexOf("://") < 8
+                    && tempNode.getNodeValue().contains("://"))){
     			tempNode.setNodeValue(baseURL + tempNode.getNodeValue());
     			map.setNamedItem(tempNode);
     		}
